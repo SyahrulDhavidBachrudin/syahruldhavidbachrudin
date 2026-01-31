@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Portofolio | Syahrul Dhavid Bachrudin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-950 text-gray-200">
+
+<!-- HERO -->
+<section class="min-h-screen flex items-center justify-center">
+  <div class="text-center px-6">
+    <h1 class="text-4xl md:text-5xl font-bold">
+      Syahrul Dhavid Bachrudin
+    </h1>
+    <p class="mt-4 text-gray-400">
+      Full Stack Developer • Flask • React • Tailwind • Laravel 
+    </p>
+  </div>
+</section>
+
+<!-- REPOS -->
+<section class="px-6 py-20 bg-gray-900">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold mb-10 text-center">
+      GitHub Projects
+    </h2>
+
+    <div id="repoList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </div>
+</section>
+
+<footer class="text-center py-6 text-gray-500 text-sm">
+  Auto-generated from GitHub API
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+<script>
+    const username = "SyahrulDhavidBachrudin";
+const repoList = document.getElementById("repoList");
+
+/**
+ * MAP SCREENSHOT PROJECT
+ * key = nama repo
+ * value = path gambar
+ */
+const screenshots = {
+  "aplikasi-kasir-flask": "assets/kasir-flask.png",
+  "dashboard-undangan": "assets/undangan-dashboard.png",
+};
+
+// default placeholder
+const placeholder = "assets/placeholder.png";
+
+fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
+  .then(res => res.json())
+  .then(repos => {
+    repos.forEach(repo => {
+      if (repo.fork) return;
+
+      const image =
+        screenshots[repo.name] || placeholder;
+
+      repoList.innerHTML += `
+        <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:scale-[1.02] transition">
+
+          <img src="${image}"
+               class="w-full h-48 object-cover"
+               alt="${repo.name}">
+
+          <div class="p-5">
+            <h3 class="text-xl font-semibold">
+              ${repo.name}
+            </h3>
+
+            <p class="text-gray-400 text-sm mt-2">
+              ${repo.description ?? "No description"}
+            </p>
+
+            <div class="flex justify-between items-center mt-4 text-sm">
+              <span class="text-gray-500">
+                ${repo.language ?? "-"}
+              </span>
+
+              <a href="${repo.html_url}"
+                 target="_blank"
+                 class="text-white underline">
+                GitHub →
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  })
+  .catch(() => {
+    repoList.innerHTML = "Gagal memuat repo.";
+  });
+</script>
